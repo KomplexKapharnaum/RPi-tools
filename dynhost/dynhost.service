@@ -4,7 +4,7 @@ After=systemd-hostnamed.service
 
 [Service]
 Type=oneshot
-ExecStart=/root/dynhost.sh
+ExecStart=/root/RPi-tools/dynhost/dynhost.sh
 
 [Install]
 WantedBy=multi-user.target

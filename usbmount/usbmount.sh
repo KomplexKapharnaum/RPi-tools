@@ -1,12 +1,9 @@
 #!/bin/bash
 
-#
-# For auto-mount, add rules in /etc/udev/rules.d/
-#
-
-
 # This script is called from our systemd unit file to mount or unmount
 # a USB drive.
+
+echo ".:: USB automount ::."
 
 usage()
 {
@@ -26,7 +23,14 @@ DEVICE="/dev/${DEVBASE}"
 MOUNT_POINT=$(/bin/mount | /bin/grep ${DEVICE} | /usr/bin/awk '{ print $3 }')
 
 do_mount()
-{
+{	
+	if [[ -z ${MOUNT_POINT} ]]; then
+        echo "${DEVICE} is not mounted"
+    else
+        /bin/umount -l ${DEVICE}
+        echo "**** Unmounted ${DEVICE}"
+    fi
+    
     if [[ -n ${MOUNT_POINT} ]]; then
         echo "Warning: ${DEVICE} is already mounted at ${MOUNT_POINT}"
         exit 1

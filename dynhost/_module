@@ -1,0 +1,3 @@
+DESC:	Change hostname with the value of name in /boot/config.txt
+START:	PATH-RPI-TOOLS/dynhost/dynhost.sh
+

@@ -1,2 +1,0 @@
-KERNEL=="sd[a-z][0-9]", SUBSYSTEMS=="usb", ACTION=="add", RUN+="/root/RPi-tools/usbmount/usbmount.sh add %k"
-KERNEL=="sd[a-z][0-9]", SUBSYSTEMS=="usb", ACTION=="remove", RUN+="/root/RPi-tools/usbmount/usbmount.sh remove %k"

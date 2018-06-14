@@ -1,0 +1,26 @@
+#!/usr/bin/env python
+
+# INSTALL from https://github.com/LEW21/pydbus:
+# pacman -S python-gobject
+# pip install pydbus
+# cp starter.service /etc/systemd/system/
+# systemctl enable starter
+
+from pydbus import SystemBus
+
+bus = SystemBus()
+systemd = bus.get(".systemd1")
+
+# for unit in systemd.ListUnits():
+#     print(unit)
+
+services = []
+with open("/boot/config.txt") as f:
+    for line in f.readlines():
+        if line.startswith("start="):
+                services = line.split("start=")[1].split(",")
+
+for s in services:
+    s = s.rstrip()
+    print ("Starting service "+s)
+    systemd.StartUnit(s+".service", "fail")
