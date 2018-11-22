@@ -1,5 +1,7 @@
 ## INSTALL
 
+!!!! NO READY YET !!!!
+
 ln -s /root/RPi-tools/networks/nmcon /usr/bin/nmcon
 cp networks /boot
 nano /boot/networks
