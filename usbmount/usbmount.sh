@@ -55,7 +55,7 @@ do_mount()
 
     # Global mount options
     # OPTS="ro,relatime"  ## READ ONLY
-    OPTS="relatime"
+    OPTS="rw,relatime"
 
     # File system type specific mount options
     if [[ ${ID_FS_TYPE} == "vfat" ]]; then
