@@ -15,6 +15,7 @@ if [ $audio = "usb" ]; then
     else
         echo "Audio already set to USB"
     fi
+    amixer set Speaker -- 80%
 else
     if [[ "$current_card" != "0" ]]; then
         cd "$(dirname "$0")/.."
