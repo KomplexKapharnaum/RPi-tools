@@ -1,0 +1,10 @@
+[Unit]
+Description=Wifi-to-Eth-Bridge
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/root/RPi-tools/networks/wifi-to-eth-forward.sh
+
+[Install]
+WantedBy=multi-user.target 
