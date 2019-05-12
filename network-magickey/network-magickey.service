@@ -1,0 +1,8 @@
+[Unit]
+Requires=etc-NetworkManager-system\x2dconnections.mount
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemctl restart NetworkManager
+
+
