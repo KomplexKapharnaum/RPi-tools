@@ -1,0 +1,15 @@
+[Unit]
+BindsTo=dev-sda.device
+After=dev-sda.device
+DefaultDependencies=no
+
+[Mount]
+What=/dev/sda1
+Where=/mnt/usb
+Type=auto
+Options=defaults
+
+[Install]
+WantedBy=dev-sda.device
+
+
