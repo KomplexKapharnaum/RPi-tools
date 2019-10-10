@@ -1,0 +1,46 @@
+# See /boot/overlays/README for all available options
+
+##
+## RASPBERRY PI settings
+##
+
+gpu_mem=256
+dtparam=audio=on
+audio_pwm_mode=2
+dtparam=i2c_arm=on
+initramfs initramfs-linux.img followkernel
+
+
+# HDMI 
+# See https://www.raspberrypi.org/documentation/configuration/config-txt/video.md
+hdmi_force_hotplug=1    # Force HDMI (even without cable)
+hdmi_drive=2            # 1: DVI mode / 2: HDMI mode
+hdmi_group=2            # 0: autodetect / 1: CEA (TVs) / 2: DMT (PC Monitor)
+hdmi_mode=16            # 82: 1080p / 85: 720p / 16: 1024×768 / 51: 1600×1200
+
+##
+## RASTA-pi settings
+##
+
+#
+# IDENTIFICATION
+# Hostname = {name}
+#
+name=rastapi
+
+
+#
+# SERVICES
+# Start systemctl services
+# exemple: start=hplayer2@kxkm,tickets
+#
+# start=hplayer2@chalon
+
+
+#
+# AUDIO
+# Select audio output (auto, hdmi, jack, usb)
+# In auto: will choose hdmi if used for video, or jack otherwise
+#
+audio=hdmi
+
