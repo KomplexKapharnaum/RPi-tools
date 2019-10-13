@@ -3,16 +3,24 @@
 ##
 ## RASPBERRY PI settings
 ##
-
 gpu_mem=256
 dtparam=audio=on
 audio_pwm_mode=2
 dtparam=i2c_arm=on
 initramfs initramfs-linux.img followkernel
 
+#
+# Boot
+#
+boot_delay=0
+dtoverlay=sdtweak,overclock_50=100  # Overclock the SD Card from 50 to 100MHz / This can only be done with at least a UHS Class 1 card
+disable_splash=1    # Disable the rainbow splash screen
 
+
+#
 # HDMI 
 # See https://www.raspberrypi.org/documentation/configuration/config-txt/video.md
+#
 hdmi_force_hotplug=1    # Force HDMI (even without cable)
 hdmi_drive=2            # 1: DVI mode / 2: HDMI mode
 hdmi_group=2            # 0: autodetect / 1: CEA (TVs) / 2: DMT (PC Monitor)
@@ -43,5 +51,4 @@ name=rastapi
 # In auto: will choose hdmi if used for video, or jack otherwise
 #
 audio=hdmi
-
 
