@@ -13,6 +13,9 @@ su root     =>  root
 pacman-key --init
 pacman-key --populate archlinuxarm
 pacman -Syu
+    #if certs error:    rm /etc/ssl/certs/ca-certificates.crt && pacman -Syu
+pacman-db-upgrade
+pacman -Sc
 
 
 ### Change root password
@@ -114,10 +117,93 @@ systemctl enable mnt-usb.mount
 (not sure how to enable)
 
 
+### data partition
+###
+-> gparted sd card 
+    - shrink system partition to ~6Gb
+    - append ~1Gb partition (ext4)
+    - boot pi
+
+
 ### rorw
 ###
+nano /boot/cmdline.txt
+=> (remove)     rw
+=> (insert)     fastboot noswap ro
+
+rm -rf /var/run /var/spool /var/lock /etc/resolv.conf /var/lib/systemd/random-seed
+ln -s /tmp /var/lib/dhcp
+ln -s /tmp /var/lib/dhcpcd5
+ln -s /tmp /var/run
+ln -s /tmp /var/spool
+ln -s /tmp /var/lock
+touch /tmp/dhcpcd.resolv.conf; ln -s /tmp/dhcpcd.resolv.conf /etc/resolv.conf
+
+ln -s /tmp/random-seed /var/lib/systemd/random-seed
+nano /lib/systemd/system/systemd-random-seed.service
+=> (insert before ExecStart)    ExecStartPre=/bin/echo "" >/tmp/random-seed
+systemctl daemon-reload
+systemctl disable systemd-random-seed
+
+nano /etc/bash.bashrc
+=> (append)     source /root/RPi-tools/rorw/rorw.bashrc
+
+nano /etc/bash.bash_logout
+=> (append)
+    rw
+    history -a
+    fake-hwclock save
+    ro
+
+mkdir /data
+nano /etc/fstab
+=>
+    /dev/mmcblk0p1  /boot   vfat    defaults,ro,errors=remount-ro        0       0
+    /dev/mmcblk0p3  /data   ext4    defaults        0       0
+    tmpfs   /var/tmp    tmpfs   nodev,nosuid    0   0
+
+reboot
+rw
+mkdir /data/var
+mv /var/log /data/var/
+ln -s /data/var/log /var/log
+
+#
+# fake-hwclock
+#
+systemctl disable systemd-timesyncd
+pacman -S fake-hwclock
+nano /usr/lib/systemd/scripts/fake-hwclock.sh
+=> (edit)   STATEFILE="/data/var/fake-hwclock-state"
+/usr/lib/systemd/scripts/fake-hwclock.sh save
+systemctl enable fake-hwclock fake-hwclock-save.timer
 
 
+#
+# Storage
+#
+mkdir /data/media
+mkdir /data/sync
 
+
+#
+# HPlayer2
+#
+cd /root
+git clone https://github.com/Hemisphere-Project/HPlayer2.git
+cd HPlayer2/scripts
+./build.sh
+
+-- pacman -S libplacebo
+
+
+### TODO
+###
+- unifi
+- router mode config (see RPi-tools/network)
+- syncthing
+- first boot (after clone):
+    * resize2fs /data
+    * reset syncthing device id
 
 
