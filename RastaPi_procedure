@@ -192,9 +192,9 @@ mkdir /data/sync
 cd /root
 git clone https://github.com/Hemisphere-Project/HPlayer2.git
 cd HPlayer2/scripts
+=> !!! there is a problem with vulkan.h. Force disable vulkan in waf (dirty fix)
 ./build.sh
 
--- pacman -S libplacebo
 
 
 ### TODO
