@@ -199,6 +199,7 @@ cd HPlayer2/scripts
 
 ### TODO
 ###
+- black boot (hide logo and logo to /dev/tty3) + splashcreen ?
 - unifi
 - router mode config (see RPi-tools/network)
 - syncthing
