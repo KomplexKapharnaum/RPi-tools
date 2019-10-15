@@ -10,11 +10,11 @@ dtparam=i2c_arm=on
 initramfs initramfs-linux.img followkernel
 
 #
-# FastBoot
+# Boot
 #
 boot_delay=0
 dtoverlay=sdtweak,overclock_50=100  # Overclock the SD Card from 50 to 100MHz / This can only be done with at least a UHS Class 1 card
-#disable_splash=1    # Disable the rainbow splash screen
+disable_splash=1    # Disable the rainbow splash screen
 
 
 #

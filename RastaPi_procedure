@@ -48,18 +48,24 @@ userdel -r alarm
 ### install some stuffs
 ###
 pacman -S git python python-pip python-setuptools
-
+pacman -S avahi wget imagemagick
+systemctl enable avahi-daemon
+systemctl start avahi-daemon
 
 ### switch from netctl to NetworkManager
 ###
-pacman -S networkmanager
+pacman -S networkmanager dnsmasq
 pacman -R dhcpcd
+systemctl stop systemd-resolved
+systemctl disable systemd-resolved
+rm -rf /etc/resolv.conf
 nano /etc/hostname   
 =>  rastapi
 nano /etc/NetworkManager/NetworkManager.conf
 =>  
     [main]
     plugins=keyfile
+    dns=dnsmasq
 
 systemctl enable NetworkManager
 systemctl start NetworkManager
@@ -131,13 +137,15 @@ nano /boot/cmdline.txt
 => (remove)     rw
 => (insert)     fastboot noswap ro
 
-rm -rf /var/run /var/spool /var/lock /etc/resolv.conf /var/lib/systemd/random-seed
 ln -s /tmp /var/lib/dhcp
 ln -s /tmp /var/lib/dhcpcd5
-ln -s /tmp /var/run
+
+rm -rf /var/run /var/spool /var/lock  /var/lib/systemd/random-seed
 ln -s /tmp /var/spool
 ln -s /tmp /var/lock
-touch /tmp/dhcpcd.resolv.conf; ln -s /tmp/dhcpcd.resolv.conf /etc/resolv.conf
+ln -s /run /var/run
+#ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf  # not if dnsmasq has been installed with NM
+
 
 ln -s /tmp/random-seed /var/lib/systemd/random-seed
 nano /lib/systemd/system/systemd-random-seed.service
@@ -195,7 +203,28 @@ cd HPlayer2/scripts
 => !!! there is a problem with vulkan.h. Force disable vulkan in waf (dirty fix)
 ./build.sh
 
+#
+# Black Boot
+#
+cp /etc/systemd/system/getty.target.wants/getty@tty{1,3}.service
+    => DefaultInstance=tty3 (instead of tty1)
+systemctl disable getty@tty1
+nano /boot/cmdline.txt
+    => console=tty3 (instead of tty1)
+    => (add) logo.nologo vt.global_cursor_default=0 consoleblank=0 quiet loglevel=3 vga=current
 
+#
+# Splash
+#
+ln -s /root/RPi-tools/splashscreen/splashscreen.service /etc/systemd/system/splashscreen.service
+systemctl enable splashscreen.service
+
+# 
+#  Syncthing
+# 
+pacman -S syncthing
+rm -Rf /data/var/syncthing
+syncthing -home=/data/var/syncthing
 
 ### TODO
 ###
