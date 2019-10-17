@@ -1,6 +1,8 @@
 
 #!/usr/bin/env python3
 
+# EXECUTE this on the main introducer
+
 # TODO:
 # catch requests errors and add retry (instead of time.sleep)
 
