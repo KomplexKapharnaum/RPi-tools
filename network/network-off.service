@@ -1,0 +1,7 @@
+[Unit]
+Description=Turn off NetworkManager
+Conflicts=NetworkManager
+
+[Service]
+Type=oneshot
+ExecStart=/root/RPi-tools/network/network-off.sh
