@@ -8,9 +8,10 @@ dtparam=audio=on
 audio_pwm_mode=2
 dtparam=i2c_arm=on
 initramfs initramfs-linux.img followkernel
+display_lcd_rotate=2
 
 #
-# Boot
+# FastBoot
 #
 boot_delay=0
 dtoverlay=sdtweak,overclock_50=100  # Overclock the SD Card from 50 to 100MHz / This can only be done with at least a UHS Class 1 card
@@ -34,7 +35,7 @@ hdmi_mode=16            # 82: 1080p / 85: 720p / 16: 1024×768 / 51: 1600×1200
 # IDENTIFICATION
 # Hostname = {name}
 #
-name=rastapi
+name=hpi-demo
 
 
 #
@@ -42,7 +43,7 @@ name=rastapi
 # Start systemctl services
 # exemple: start=hplayer2@kxkm,tickets
 #
-# start=hplayer2@chalon
+start=hplayer2@gadagne19,network-off
 
 
 #
@@ -50,5 +51,4 @@ name=rastapi
 # Select audio output (auto, hdmi, jack, usb)
 # In auto: will choose hdmi if used for video, or jack otherwise
 #
-audio=hdmi
-
+audio=jack
