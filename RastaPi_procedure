@@ -123,6 +123,11 @@ systemctl enable mnt-usb.mount
 (not sure how to enable)
 
 
+### network interface name persistence
+### 
+nano /boot/cmdline.txt
+    => (append) net.ifnames=0 biosdevname=0
+
 ### data partition
 ###
 -> gparted sd card 
@@ -137,13 +142,11 @@ nano /boot/cmdline.txt
 => (remove)     rw
 => (insert)     fastboot noswap ro
 
-ln -s /tmp /var/lib/dhcp
-ln -s /tmp /var/lib/dhcpcd5
-
 rm -rf /var/run /var/spool /var/lock  /var/lib/systemd/random-seed
 ln -s /tmp /var/spool
 ln -s /tmp /var/lock
 ln -s /run /var/run
+
 #ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf  # not if dnsmasq has been installed with NM
 
 
@@ -175,6 +178,9 @@ rw
 mkdir /data/var
 mv /var/log /data/var/
 ln -s /data/var/log /var/log
+
+mv /var/lib /data/var/
+ln -s /data/var/lib /var/lib
 
 #
 # fake-hwclock
