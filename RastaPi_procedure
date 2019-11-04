@@ -47,15 +47,15 @@ userdel -r alarm
 
 ### install some stuffs
 ###
-pacman -S git python python-pip python-setuptools
-pacman -S avahi wget imagemagick
+pacman -S git python python-pip python-setuptools --noconfirm
+pacman -S avahi wget imagemagick htop --noconfirm
 systemctl enable avahi-daemon
 systemctl start avahi-daemon
 
 ### switch from netctl to NetworkManager
 ###
-pacman -S networkmanager dnsmasq
-pacman -R dhcpcd
+pacman -S networkmanager dnsmasq --noconfirm
+pacman -R dhcpcd --noconfirm
 systemctl stop systemd-resolved
 systemctl disable systemd-resolved
 rm -rf /etc/resolv.conf
@@ -63,14 +63,14 @@ nano /etc/hostname
 =>  rastapi
 nano /etc/NetworkManager/NetworkManager.conf
 =>  
-    [main]
-    plugins=keyfile
-    dns=dnsmasq
+[main]
+plugins=keyfile
+dns=dnsmasq
 
 systemctl enable NetworkManager
 systemctl start NetworkManager
 nmcli con add type ethernet con-name eth0-dhcp ifname eth0
-pacman -R netctl
+pacman -R netctl --noconfirm
 
 
 ### clone RPi-tools
@@ -96,7 +96,7 @@ systemctl start dynhost
 ### audioselect 
 ### (needs dtparam=audio=on inf /boot/config.txt)
 ###
-pacman -S alsa alsa-utils
+pacman -S alsa alsa-utils --noconfirm
 cp /root/RPi-tools/audioselect/asound.conf /etc/asound.conf
 ln -s /root/RPi-tools/audioselect/audioselect.service /etc/systemd/system/audioselect.service
 systemctl enable audioselect
@@ -105,7 +105,7 @@ systemctl start audioselect
 
 ### starter
 ###
-pacman -S python-pydbus
+pacman -S python-pydbus --noconfirm
 ln -s /root/RPi-tools/starter/starter.service /etc/systemd/system/starter.service
 systemctl enable starter
 systemctl start starter
@@ -123,11 +123,6 @@ systemctl enable mnt-usb.mount
 (not sure how to enable)
 
 
-### network interface name persistence
-### 
-nano /boot/cmdline.txt
-    => (append) net.ifnames=0 biosdevname=0
-
 ### data partition
 ###
 -> gparted sd card 
@@ -142,51 +137,59 @@ nano /boot/cmdline.txt
 => (remove)     rw
 => (insert)     fastboot noswap ro
 
-rm -rf /var/run /var/spool /var/lock  /var/lib/systemd/random-seed
+rm -rf /var/run /var/spool /var/lock  
 ln -s /tmp /var/spool
 ln -s /tmp /var/lock
 ln -s /run /var/run
 
 #ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf  # not if dnsmasq has been installed with NM
 
+# rm -rf /var/lib/systemd/random-seed
+#ln -s /tmp/random-seed /var/lib/systemd/random-seed
+#nano /lib/systemd/system/systemd-random-seed.service
+#=> (insert before ExecStart)    ExecStartPre=/bin/echo "" >/tmp/random-seed
+#systemctl daemon-reload
 
-ln -s /tmp/random-seed /var/lib/systemd/random-seed
-nano /lib/systemd/system/systemd-random-seed.service
-=> (insert before ExecStart)    ExecStartPre=/bin/echo "" >/tmp/random-seed
-systemctl daemon-reload
 systemctl disable systemd-random-seed
+
+mkdir /data
+nano /etc/fstab
+=>
+/dev/mmcblk0p1  /boot   vfat    defaults,ro,errors=remount-ro        0       0
+/dev/mmcblk0p3  /data   ext4    defaults        0       0
+tmpfs   /var/tmp    tmpfs   nodev,nosuid    0   0
+
+reboot
+rw
 
 nano /etc/bash.bashrc
 => (append)     source /root/RPi-tools/rorw/rorw.bashrc
 
 nano /etc/bash.bash_logout
 => (append)
-    rw
-    history -a
-    fake-hwclock save
-    ro
-
-mkdir /data
-nano /etc/fstab
-=>
-    /dev/mmcblk0p1  /boot   vfat    defaults,ro,errors=remount-ro        0       0
-    /dev/mmcblk0p3  /data   ext4    defaults        0       0
-    tmpfs   /var/tmp    tmpfs   nodev,nosuid    0   0
-
-reboot
 rw
+history -a
+fake-hwclock save
+ro
+
 mkdir /data/var
 mv /var/log /data/var/
 ln -s /data/var/log /var/log
 
-mv /var/lib /data/var/
-ln -s /data/var/lib /var/lib
+mkdir /data/var/lib
+mv /var/lib/NetworkManager /data/var/lib
+ln -s /data/var/lib/NetworkManager /var/lib/NetworkManager
+
+### network interface name persistence
+### 
+nano /boot/cmdline.txt
+    => (append) net.ifnames=0 #biosdevname=0
 
 #
 # fake-hwclock
 #
 systemctl disable systemd-timesyncd
-pacman -S fake-hwclock
+pacman -S fake-hwclock --noconfirm
 nano /usr/lib/systemd/scripts/fake-hwclock.sh
 => (edit)   STATEFILE="/data/var/fake-hwclock-state"
 /usr/lib/systemd/scripts/fake-hwclock.sh save
@@ -199,16 +202,6 @@ systemctl enable fake-hwclock fake-hwclock-save.timer
 mkdir /data/media
 mkdir /data/sync
 
-
-#
-# HPlayer2
-#
-cd /root
-git clone https://github.com/Hemisphere-Project/HPlayer2.git
-cd HPlayer2/scripts
-=> !!! there is a problem with vulkan.h. Force disable vulkan in waf (dirty fix)
-./build.sh
-
 #
 # Black Boot
 #
@@ -219,9 +212,21 @@ nano /boot/cmdline.txt
     => console=tty3 (instead of tty1)
     => (add) logo.nologo vt.global_cursor_default=0 consoleblank=0 quiet loglevel=3 vga=current
 
+
+#
+# HPlayer2
+#
+cd /root
+git clone https://github.com/Hemisphere-Project/HPlayer2.git
+cd HPlayer2/scripts
+./build.sh
+ln -s /root/HPlayer2/hplayer2\@.service /etc/systemd/system/hplayer2\@.service
+
+
 #
 # Splash
 #
+pacman -S fbida --noconfirm
 ln -s /root/RPi-tools/splashscreen/splashscreen.service /etc/systemd/system/splashscreen.service
 systemctl enable splashscreen.service
 
@@ -234,7 +239,6 @@ syncthing -home=/data/var/syncthing
 
 ### TODO
 ###
-- black boot (hide logo and logo to /dev/tty3) + splashcreen ?
 - unifi
 - router mode config (see RPi-tools/network)
 - syncthing
