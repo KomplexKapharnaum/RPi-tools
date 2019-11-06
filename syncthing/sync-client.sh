@@ -14,4 +14,4 @@ if [[ $SD_ID == $CURRENT_SD_ID ]]
 fi
 
 # Start syncthing with forced API-key
-syncthing -home=/data/var/syncthing -gui-apikey=rastaKEY-unsecure -gui-address=0.0.0.0
+syncthing -home=/data/var/syncthing -gui-apikey=rastaKEYunsecure -gui-address=0.0.0.0:8384
