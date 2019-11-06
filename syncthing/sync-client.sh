@@ -10,9 +10,8 @@ if [[ $SD_ID == $CURRENT_SD_ID ]]
                 echo "sd-id has changed, i am a clone !"
                 rm -Rf /data/var/syncthing
                 rm -Rf /data/sync
-                mkdir /data/sync
                 echo $SD_ID > /data/var/sd-id
 fi
 
 # Start syncthing with forced API-key
-syncthing -home=/data/var/syncthing -gui-apikey=rastaKEY-unsecure
+syncthing -home=/data/var/syncthing -gui-apikey=rastaKEY-unsecure -gui-address=0.0.0.0
