@@ -141,27 +141,19 @@ nano /boot/cmdline.txt
 => (remove)     rw
 => (insert)     fastboot noswap ro
 
-rm -rf /var/run /var/spool /var/lock  
-ln -s /tmp /var/spool
-ln -s /tmp /var/lock
-ln -s /run /var/run
-
-#ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf  # not if dnsmasq has been installed with NM
-
-# rm -rf /var/lib/systemd/random-seed
-#ln -s /tmp/random-seed /var/lib/systemd/random-seed
-#nano /lib/systemd/system/systemd-random-seed.service
-#=> (insert before ExecStart)    ExecStartPre=/bin/echo "" >/tmp/random-seed
-#systemctl daemon-reload
-
 systemctl disable systemd-random-seed
 
 mkdir /data
 nano /etc/fstab
-=>
-/dev/mmcblk0p1  /boot   vfat    defaults,ro,errors=remount-ro        0       0
-/dev/mmcblk0p3  /data   ext4    defaults        0       0
-tmpfs   /var/tmp    tmpfs   nodev,nosuid    0   0
+=> (set)
+UUID=0FCA-9DBF                                  /boot       vfat    defaults,ro,errors=remount-ro,umask=177        0       0
+UUID=2e8ef7a7-6acb-4209-9ed7-dff0f2b4514f       /data       ext4    defaults        0       0
+tmpfs                                           /var/tmp    tmpfs   nodev,nosuid    0   0
+tmpfs                                           /var/log    tmpfs   nodev,nosuid    0   0
+tmpfs                                           /var/spool  tmpfs   nodev,nosuid    0   0
+tmpfs                                           /var/lock    tmpfs   nodev,nosuid    0   0
+/run                                            /var/run     none    bind                      0       0
+tmpfs                                           /var/lib/NetworkManager    tmpfs   nodev,nosuid    0   0
 
 reboot
 rw
@@ -176,13 +168,6 @@ history -a
 fake-hwclock save
 ro
 
-mkdir /data/var
-mv /var/log /data/var/
-ln -s /data/var/log /var/log
-
-mkdir /data/var/lib
-mv /var/lib/NetworkManager /data/var/lib
-ln -s /data/var/lib/NetworkManager /var/lib/NetworkManager
 
 ### network interface name persistence
 ### 
@@ -204,7 +189,6 @@ systemctl enable fake-hwclock fake-hwclock-save.timer
 # Storage
 #
 mkdir /data/media
-mkdir /data/sync
 
 #
 # Black Boot
@@ -238,8 +222,7 @@ systemctl enable splashscreen.service
 #  Syncthing
 # 
 pacman -S syncthing
-rm -Rf /data/var/syncthing
-# syncthing -home=/data/var/syncthing
+
 
 ### TODO
 ###
