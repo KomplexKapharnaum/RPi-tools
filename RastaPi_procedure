@@ -130,6 +130,10 @@ systemctl enable mnt-usb.mount
     - append ~1Gb partition (ext4)
     - boot pi
 
+### french keyboard
+###
+nano /etc/bash.bashrc
+=> (append)     loadkeys fr
 
 ### rorw
 ###
@@ -235,7 +239,7 @@ systemctl enable splashscreen.service
 # 
 pacman -S syncthing
 rm -Rf /data/var/syncthing
-syncthing -home=/data/var/syncthing
+# syncthing -home=/data/var/syncthing
 
 ### TODO
 ###
