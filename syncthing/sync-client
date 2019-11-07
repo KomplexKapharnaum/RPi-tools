@@ -1,4 +1,5 @@
 #!/bin/bash
+pkill syncthing
 cd "$(dirname "$0")"
 
 # COMMON API KEY
@@ -21,4 +22,4 @@ if [[ $DRIVE_ID == $LAST_DRIVE_ID ]]
 fi
 
 # Start syncthing with forced API-key
-syncthing -home=/data/var/syncthing -gui-apikey="$SYNC_API_KEY" -gui-address=0.0.0.0:8384 > /var/log/syncthing-client
+syncthing -home=/data/var/syncthing -gui-apikey="$SYNC_API_KEY" -gui-address=0.0.0.0:8384 #> /var/log/syncthing-client
