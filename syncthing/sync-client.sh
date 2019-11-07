@@ -1,17 +1,24 @@
 #!/bin/bash
+cd "$(dirname "$0")"
+
+# COMMON API KEY
+SYNC_API_KEY=$(cat key)
+echo "common API key: $SYNC_API_KEY"
 
 # CHECK IF SD HAS BEEN CLONED !
-SD_ID=$(udevadm info --name=/dev/mmcblk0 | grep ID_SERIAL | cut -d '=' -f2)
-CURRENT_SD_ID=$(cat /data/var/sd-id)
-if [[ $SD_ID == $CURRENT_SD_ID ]]
+DRIVE=$(findmnt -n -o SOURCE --target /)
+DRIVE_ID=$(udevadm info --name=$DRIVE | grep ID_SERIAL= | cut -d '=' -f2)
+LAST_DRIVE_ID=$(cat /data/var/drive-id)
+
+if [[ $DRIVE_ID == $LAST_DRIVE_ID ]]
         then
-                echo "sd-id is valid"
+                echo "drive-id is valid"
         else
-                echo "sd-id has changed, i am a clone !"
+                echo "drive-id has changed, i am a clone !"
                 rm -Rf /data/var/syncthing
                 rm -Rf /data/sync
-                echo $SD_ID > /data/var/sd-id
+                echo $DRIVE_ID > /data/var/drive-id
 fi
 
 # Start syncthing with forced API-key
-syncthing -home=/data/var/syncthing -gui-apikey=rastaKEYunsecure -gui-address=0.0.0.0:8384
+syncthing -home=/data/var/syncthing -gui-apikey="$SYNC_API_KEY" -gui-address=0.0.0.0:8384 > /var/log/syncthing-client
