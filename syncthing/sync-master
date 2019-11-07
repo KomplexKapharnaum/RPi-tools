@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 
 # EXECUTE this on the main introducer
 
@@ -15,7 +16,7 @@ import subprocess
 basepath = os.path.dirname(os.path.realpath(__file__))
 
 # Start local client
-syncClient = subprocess.Popen([ os.path.join( basepath, 'sync-client.sh') ])
+syncClient = subprocess.Popen([ os.path.join( basepath, 'sync-client') ])
 time.sleep(5)
 
 # get common API key
@@ -35,7 +36,7 @@ localkey = mydoc.getElementsByTagName('apikey')[0].firstChild.nodeValue
 # REST connect
 def connect(ip):
     # start local link
-    m = Syncthing(apikey)
+    m = Syncthing(apikey, host=ip)
     m.system.connections()
 
     # check for errors
@@ -93,6 +94,7 @@ if localkey != apikey:
     config['options']['urAccepted'] = -1
     config['options']['overwriteRemoteDeviceNamesOnConnect'] = True
     config['options']['defaultFolderPath'] = '/data'
+    config['options']['crashReportingEnabled'] = False
 
     print("Applying Server conf.")
     LOCAL.system.set_config(config, True)
@@ -138,7 +140,7 @@ def autoconfremote(ip):
             rconfig['options']['relaysEnabled'] = False
             rconfig['options']['startBrowser'] = False
             rconfig['options']['natEnabled'] = False
-            rconfig['options']['urURL'] = ''
+            rconfig['options']['urAccepted'] = -1
             rconfig['options']['overwriteRemoteDeviceNamesOnConnect'] = True
             rconfig['options']['defaultFolderPath'] = '/data'
             rconfig['options']['crashReportingEnabled'] = False
@@ -146,6 +148,7 @@ def autoconfremote(ip):
             # fix access (or restart will loose it)
             rconfig['gui']['address'] = '0.0.0.0:8384'
             rconfig['gui']['apikey'] = apikey
+            rconfig['gui']['insecureAdminAccess'] = True
                             
             print('Fresh device configured:', event['data']['device'])
             r.system.set_config(rconfig)
@@ -191,6 +194,7 @@ for event in event_stream:
                 break
         
         if ip:
+            print("Device discovered: checking remote config")
             autoconfremote(ip)
 
 
@@ -198,6 +202,8 @@ for event in event_stream:
     # Register unknown remote device 
     #
     elif event['type'] == 'DeviceRejected':
+        print("Device rejected: adding to local pool")
+
         config = LOCAL.system.config()
 
         newDevice = {}

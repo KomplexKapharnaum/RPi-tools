@@ -1,0 +1,11 @@
+[Unit]
+Description=Syncthing automated client
+           
+[Service]
+Type=simple
+ExecStart=/root/syncthing/sync-client
+ExecStop=/bin/pkill syncthing 
+Restart=always
+           
+[Install]
+WantedBy=default.target
