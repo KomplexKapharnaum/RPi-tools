@@ -231,6 +231,8 @@ ln -s /root/RPi-tools/syncthing/sync-master.service /etc/systemd/system/sync-mas
 #   Filemanager
 #
 pacman -S php php-curl php-mbstring php-gd
+# php -S 0.0.0.0:8090 -t /root/RPi-tools/filemanager/KodExplorer/
+
 
 
 ### TODO
