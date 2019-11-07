@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta Name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Dossier OTEP FDL 2018.doc - KodExplorer - Powered by KodExplorer</title>
+    <link rel="stylesheet" href="./MTkxMTA4OTcxMDQ2NjEz.files/bootstrap.min.css">
+    <link rel="stylesheet" href="./MTkxMTA4OTcxMDQ2NjEz.files/style1.css">
+    <script src="./MTkxMTA4OTcxMDQ2NjEz.files/jquery.min.js"></script>
+    <script src="./MTkxMTA4OTcxMDQ2NjEz.files/custom.js"></script>
+  </head>
+  <body class="word-body">
+    <DIV class="navbar navbar-inverse navbar-fixed-top">
+      <DIV class="navbar-inner">
+        <DIV class="container-fluid">
+          <a class="brand lnk-file-title" STYLE="text-decoration: none; width: 200px" TITLE="Dossier OTEP FDL 2018.doc">Dossier OTEP FDL 2018.doc</a>
+          <DIV class="changePage">
+            <a class="pageUp" href="javascript:;" onClick="slidePage(0)"></a>
+            <a class="pageDown" href="javascript:;" onClick="slidePage(1)"></a>
+            <SPAN STYLE="padding:0px 10px 0px 10px">Page:</SPAN>
+            <INPUT class="activePage" type="text" Value="1" onBlur="changePage(this.value)" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" onafterpaste="this.value=this.value.replace(/[^0-9]/g,'')">
+            <SPAN class="totalPage"></SPAN>
+          </DIV>
+        </DIV>
+      </DIV>
+    </DIV>
+    <DIV class="sidebar"></DIV>
+    <DIV id="printArea" STYLE="display:none"></DIV>
+    <DIV class="container-fluid container-fluid-content">
+      <DIV class="row-fluid">
+        <DIV class="span12 docArea">
+          <DIV class="word-page" STYLE="width:793px;height:1122px">
+            <DIV class="word-content"></DIV>
+          </DIV>
+          <DIV class="word-page" STYLE="width:793px;height:1122px">
+            <DIV class="word-content"></DIV>
+          </DIV>
+          <DIV class="word-page" STYLE="width:793px;height:1122px">
+            <DIV class="word-content"></DIV>
+          </DIV>
+          <DIV class="word-page" STYLE="width:793px;height:1122px">
+            <DIV class="word-content"></DIV>
+          </DIV>
+          <DIV class="word-page" STYLE="width:793px;height:1122px">
+            <DIV class="word-content"></DIV>
+          </DIV>
+          <DIV class="word-page" STYLE="width:793px;height:1122px">
+            <DIV class="word-content"></DIV>
+          </DIV>
+          <DIV class="word-page" STYLE="width:793px;height:1122px">
+            <DIV class="word-content"></DIV>
+          </DIV>
+          <DIV class="word-page" STYLE="width:793px;height:1122px">
+            <DIV class="word-content"></DIV>
+          </DIV>
+          <DIV class="word-page" STYLE="width:793px;height:1122px">
+            <DIV class="word-content"></DIV>
+          </DIV>
+          <DIV class="word-page" STYLE="width:793px;height:1122px">
+            <DIV class="word-content"></DIV>
+          </DIV>
+          <DIV class="word-page" STYLE="width:793px;height:1122px">
+            <DIV class="word-content"></DIV>
+          </DIV>
+          <DIV class="word-page" STYLE="width:793px;height:1122px">
+            <DIV class="word-content"></DIV>
+          </DIV>
+          <DIV class="word-page" STYLE="width:793px;height:1122px">
+            <DIV class="word-content"></DIV>
+          </DIV>
+          <DIV class="word-page" STYLE="width:793px;height:1122px">
+            <DIV class="word-content"></DIV>
+          </DIV>
+          <DIV class="word-page" STYLE="width:793px;height:1122px">
+            <DIV class="word-content"></DIV>
+          </DIV>
+          <DIV class="word-page" STYLE="width:793px;height:1122px">
+            <DIV class="word-content"></DIV>
+          </DIV>
+          <DIV class="word-page" STYLE="width:793px;height:1122px">
+            <DIV class="word-content"></DIV>
+          </DIV>
+          <DIV class="word-page" STYLE="width:793px;height:1122px">
+            <DIV class="word-content"></DIV>
+          </DIV>
+          <DIV class="word-page" STYLE="width:793px;height:1122px">
+            <DIV class="word-content"></DIV>
+          </DIV>
+        </DIV>
+      </DIV>
+    </DIV>
+    <DIV id="footer" STYLE="width:100%;text-align:center;height:40px;line-height:40px;position:fixed;bottom:0px">Powered by:
+      <a href="http://www.yozodcs.com">永中DCS</a>&nbsp;&nbsp;&nbsp;Email:
+      <a href="mailto:dcs@yozosoft.com">dcs@yozosoft.com</a>
+    </DIV>
+    <INPUT id="scale" type="hidden" value="1.0">
+    <script>
+var widthlist = '{"fileType":"word","data": [{'
++'     "index":  "1" ,'
++'     "width": "793" ,'
++'     "height": "1122" '
++' },{'
++'     "index":  "2" ,'
++'     "width": "793" ,'
++'     "height": "1122" '
++' },{'
++'     "index":  "3" ,'
++'     "width": "793" ,'
++'     "height": "1122" '
++' },{'
++'     "index":  "4" ,'
++'     "width": "793" ,'
++'     "height": "1122" '
++' },{'
++'     "index":  "5" ,'
++'     "width": "793" ,'
++'     "height": "1122" '
++' },{'
++'     "index":  "6" ,'
++'     "width": "793" ,'
++'     "height": "1122" '
++' },{'
++'     "index":  "7" ,'
++'     "width": "793" ,'
++'     "height": "1122" '
++' },{'
++'     "index":  "8" ,'
++'     "width": "793" ,'
++'     "height": "1122" '
++' },{'
++'     "index":  "9" ,'
++'     "width": "793" ,'
++'     "height": "1122" '
++' },{'
++'     "index":  "10" ,'
++'     "width": "793" ,'
++'     "height": "1122" '
++' },{'
++'     "index":  "11" ,'
++'     "width": "793" ,'
++'     "height": "1122" '
++' },{'
++'     "index":  "12" ,'
++'     "width": "793" ,'
++'     "height": "1122" '
++' },{'
++'     "index":  "13" ,'
++'     "width": "793" ,'
++'     "height": "1122" '
++' },{'
++'     "index":  "14" ,'
++'     "width": "793" ,'
++'     "height": "1122" '
++' },{'
++'     "index":  "15" ,'
++'     "width": "793" ,'
++'     "height": "1122" '
++' },{'
++'     "index":  "16" ,'
++'     "width": "793" ,'
++'     "height": "1122" '
++' },{'
++'     "index":  "17" ,'
++'     "width": "793" ,'
++'     "height": "1122" '
++' },{'
++'     "index":  "18" ,'
++'     "width": "793" ,'
++'     "height": "1122" '
++' },{'
++'     "index":  "19" ,'
++'     "width": "793" ,'
++'     "height": "1122" '
++' }'
+ +']'
++'}';
+var basePath = "./MTkxMTA4OTcxMDQ2NjEz.files";
+var outlineData = 0;
+</script>
+  </body>
+  <script src="./MTkxMTA4OTcxMDQ2NjEz.files/decide.js"></script>
+  <script src="./MTkxMTA4OTcxMDQ2NjEz.files/pdf1.js"></script>
+  <script src="./MTkxMTA4OTcxMDQ2NjEz.files/doc.js"></script>
+  <script src="./MTkxMTA4OTcxMDQ2NjEz.files/pagewatermark.js"></script>
+  <script src="./MTkxMTA4OTcxMDQ2NjEz.files/cZoom.js"></script>
+</html>
