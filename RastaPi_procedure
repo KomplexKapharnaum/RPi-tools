@@ -222,6 +222,15 @@ systemctl enable splashscreen.service
 #  Syncthing
 # 
 pacman -S syncthing
+pip3 install syncthing
+ln -s /root/RPi-tools/syncthing/sync-client.service /etc/systemd/system/sync-client.service
+ln -s /root/RPi-tools/syncthing/sync-master.service /etc/systemd/system/sync-master.service
+
+#
+#  Filemanager (KODexplorer)
+#
+pacman -S php
+
 
 
 ### TODO
