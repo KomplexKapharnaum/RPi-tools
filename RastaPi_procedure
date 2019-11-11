@@ -226,10 +226,12 @@ pip3 install syncthing
 ln -s /root/RPi-tools/syncthing/sync-client.service /etc/systemd/system/sync-client.service
 ln -s /root/RPi-tools/syncthing/sync-master.service /etc/systemd/system/sync-master.service
 
+
 #
-#  Filemanager (KODexplorer)
+#   Filemanager
 #
-pacman -S php
+pacman -S php php-curl php-mbstring php-gd
+# php -S 0.0.0.0:8090 -t /root/RPi-tools/filemanager/KodExplorer/
 
 
 

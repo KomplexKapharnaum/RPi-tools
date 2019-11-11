@@ -1,0 +1,31 @@
+{
+    "currentStep": 1,
+    "success": 1,
+    "taskUuid": "4d9200d9cf33cf80afeb1bb3a08f12ff",
+    "hideData": [],
+    "steps": [
+        {
+            "name": "upload",
+            "process": "uploadProcess",
+            "status": 2,
+            "result": {
+                "result": 0,
+                "data": "8a7eb09c-fdcb-409f-8419-73176f2c8400\/feuille-distribution-cremerie.xls",
+                "message": "转换成功"
+            }
+        },
+        {
+            "name": "convert",
+            "process": "convert",
+            "status": 2,
+            "result": {
+                "result": 0,
+                "data": [
+                    "http:\/\/dcs.yozosoft.com:18080\/2019\/11\/08\/MTkxMTA4OTc1MzU3MjIw.html"
+                ],
+                "message": "转换成功",
+                "type": 1
+            }
+        }
+    ]
+}

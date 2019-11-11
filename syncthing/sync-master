@@ -17,7 +17,7 @@ basepath = os.path.dirname(os.path.realpath(__file__))
 
 # Start local client
 syncClient = subprocess.Popen([ os.path.join( basepath, 'sync-client') ])
-time.sleep(5)
+time.sleep(6)
 
 # get common API key
 with open(os.path.join( basepath, 'key'), 'r') as theFile:
@@ -97,8 +97,12 @@ if localkey != apikey:
     config['options']['crashReportingEnabled'] = False
 
     print("Applying Server conf.")
-    LOCAL.system.set_config(config, True)
-    time.sleep(5)
+    try:
+        LOCAL.system.set_config(config)
+        LOCAL.system.restart()
+    except:
+        pass
+    time.sleep(6)
     LOCAL = connect('127.0.0.1')
 
 else:
