@@ -22,5 +22,5 @@ if [[ $DRIVE_ID == $LAST_DRIVE_ID ]]
 fi
 
 # Start syncthing with forced API-key
-avahi-publish-service 'Syncthing interface' '_http._tcp.' 8384 &
+avahi-publish-service 'Syncthing WEB interface' '_http._tcp.' 8384 &
 syncthing -home=/data/var/syncthing -gui-apikey="$SYNC_API_KEY" -gui-address=0.0.0.0:8384 > /var/log/syncthing-client
