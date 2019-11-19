@@ -422,7 +422,9 @@ class explorer extends Controller{
 		$checkFile = ($app == 'editor'?true:false);
 		$fav = $this->_treeFav($app);
 
+		/*MGR*/
 		$publicPath = '/data/';
+		/**/
 		$groupRoot  = systemGroup::getInfo(1);
 		$groupRootName = LNG('public_path');
 		if($groupRoot && $groupRoot['name'] != 'public'){
@@ -452,7 +454,8 @@ class explorer extends Controller{
 		$rootIsparent = count($root)>0?true:false;
 		$publicIsparent = count($public)>0?true:false;
 		$treeData = array(
-			/*'fav'=>array(
+			/*MGR
+			'fav'=>array(
 				'name'      => LNG('fav'),
 				'ext' 		=> "tree-fav",
 				'menuType'  => "menu-tree-fav-root",
@@ -463,7 +466,8 @@ class explorer extends Controller{
 				'open'      => true,
 				'isParent'  => count($fav)>0?true:false
 			),*/
-			/*'myHome'=>array(
+			/*MGR
+			'myHome'=>array(
 				'name'		=> LNG('root_path'),
 				'menuType'  => "menu-tree-root",
 				'ext' 		=> "tree-self",
@@ -484,30 +488,30 @@ class explorer extends Controller{
 				'path' 		=> $publicPath,
 				'type'      => 'folder',
 				'open'      => true,
-				'isParent'  => $publicIsparent
+				'isParent'  => true		/*MGR*/
 			),
-			'myGroup'=>array(
-				'name'		=> LNG('my_kod_group'),//TODO
-				'menuType'  => "menu-tree-group-root",
-				'ext' 		=> "group-self-root",
-				'children'  => $this->_groupSelf(),
+			// 'myGroup'=>array(
+			// 	'name'		=> LNG('my_kod_group'),//TODO
+			// 	'menuType'  => "menu-tree-group-root",
+			// 	'ext' 		=> "group-self-root",
+			// 	'children'  => $this->_groupSelf(),
 
-				'path' 		=> KOD_GROUP_ROOT_SELF,
-				'type'      => 'folder',
-				'open'      => true,
-				'isParent'  => true
-			),
-			'group'=>array(
-				'name'		=> LNG('kod_group'),
-				'menuType'  => "menu-tree-group-root",
-				'ext' 		=> "group-root",
-				'children'  => $this->_groupTree('1'),
+			// 	'path' 		=> KOD_GROUP_ROOT_SELF,
+			// 	'type'      => 'folder',
+			// 	'open'      => true,
+			// 	'isParent'  => true
+			// ),
+			// 'group'=>array(
+			// 	'name'		=> LNG('kod_group'),
+			// 	'menuType'  => "menu-tree-group-root",
+			// 	'ext' 		=> "group-root",
+			// 	'children'  => $this->_groupTree('1'),
 
-				'path' 		=> KOD_GROUP_ROOT_ALL,
-				'type'      => 'folder',
-				'open'      => true,
-				'isParent'  => true
-			),
+			// 	'path' 		=> KOD_GROUP_ROOT_ALL,
+			// 	'type'      => 'folder',
+			// 	'open'      => true,
+			// 	'isParent'  => true
+			// ),
 		);
 
 		//编辑器简化树目录
@@ -517,15 +521,15 @@ class explorer extends Controller{
 			unset($treeData['public']);
 			//管理员，优化编辑器树目录
 			if($GLOBALS['isRoot']==1){
-				$listWeb  = $this->_path(_DIR(WEB_ROOT),$checkFile,true);
+				$listWeb  = $this->_path(_DIR('/data/'),$checkFile,true);	/*MGR*/
 				$web = array_merge($listWeb['folderList'],$listWeb['fileList']);
 				$treeData['webroot'] = array(
-					'name'      => get_path_this(WEB_ROOT),
+					'name'      => get_path_this('/data/'),
 					'menuType'  => "menu-tree-root",
 					'ext' 		=> "folder",
 					'children'  => $web,
 
-					'path' 		=> WEB_ROOT,
+					'path' 		=> '/data/',	/*MGR*/
 					'type'      => 'folder',
 					'open'      => true,
 					'isParent'  => true

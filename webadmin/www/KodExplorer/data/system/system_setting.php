@@ -2,7 +2,7 @@
     "systemPassword": "8RewpZm9iDzfgwhCViIE",
     "systemName": "KodExplorer",
     "systemDesc": "",
-    "pathHidden": "Thumb.db,.DS_Store,.gitignore,.git,.stignore,.stfolder",
+    "pathHidden": "Thumb.db,.DS_Store,.gitignore,.git,.stignore,.stfolder,.*",
     "autoLogin": "0",
     "needCheckCode": "0",
     "firstIn": "explorer",

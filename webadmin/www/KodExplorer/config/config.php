@@ -88,16 +88,16 @@ if (strtoupper(substr(PHP_OS, 0,3)) === 'WIN') {
 }
 
 // 部分反向代理导致获取不到url的问题优化;忽略同域名http和https的情况
-if(isset($_COOKIE['APP_HOST'])){
-	if( get_url_domain($_COOKIE['HOST']) != get_url_domain($_COOKIE['APP_HOST']) ||
-	    get_url_scheme($_COOKIE['HOST']) == get_url_scheme($_COOKIE['APP_HOST']) ){
-		define('HOST',$_COOKIE['HOST']);
-		define('APP_HOST',$_COOKIE['APP_HOST']);
-	}
-}
+// if(isset($_COOKIE['APP_HOST'])){
+// 	if( get_url_domain($_COOKIE['HOST']) != get_url_domain($_COOKIE['APP_HOST']) ||
+// 	    get_url_scheme($_COOKIE['HOST']) == get_url_scheme($_COOKIE['APP_HOST']) ){
+// 		define('HOST',$_COOKIE['HOST']);
+// 		define('APP_HOST',$_COOKIE['APP_HOST']);
+// 	}
+// }
 if(!defined('HOST')){		define('HOST',rtrim(get_host(),'/').'/');}
 if(!defined('WEB_ROOT')){	define('WEB_ROOT',webroot_path(BASIC_PATH) );}
-if(!defined('APP_HOST')){	define('APP_HOST',HOST.str_replace(WEB_ROOT,'',BASIC_PATH));} //程序根目录
+if(!defined('APP_HOST')){	define('APP_HOST', HOST.str_replace(WEB_ROOT,'',BASIC_PATH));} //程序根目录
 define('PLUGIN_HOST',APP_HOST.str_replace(BASIC_PATH,'',PLUGIN_DIR));//插件目录
 
 include(CONTROLLER_DIR.'utils.php');
