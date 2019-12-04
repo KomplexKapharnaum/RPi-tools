@@ -172,6 +172,7 @@ nano /etc/fstab
     /dev/mmcblk0p1  /boot   vfat    defaults,ro,errors=remount-ro        0       0
     /dev/mmcblk0p3  /data   ext4    defaults        0       0
     tmpfs   /var/tmp    tmpfs   nodev,nosuid    0   0
+    tmpfs   /run        tmpfs   nodev,nosuid    0   0
 
 reboot
 rw
