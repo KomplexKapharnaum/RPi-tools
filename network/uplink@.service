@@ -1,0 +1,11 @@
+[Unit]
+Description=Turn off NetworkManager
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/RPi-tools/network/uplink-forward %i
+
+[Install]
+WantedBy=multi-user.target
