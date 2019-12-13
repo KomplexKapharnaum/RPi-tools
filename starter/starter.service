@@ -3,7 +3,7 @@ Description=Starter launch services based on /boot/config.txt
 
 [Service]
 Type=oneshot
-ExecStart=/root/RPi-tools/starter/starter
+ExecStart=/opt/RPi-tools/starter/starter
 
 [Install]
 WantedBy=multi-user.target
