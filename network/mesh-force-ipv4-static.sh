@@ -10,6 +10,5 @@ while True:
 			print ("ipv4 ok on eth0")
 		except:
 			print ("ipv4 missing.. restarting eth0")
-			# subprocess.call("ifconfig eth0 down; sleep 3; ifconfig eth0 2.0.0.1 netmask 255.255.0.0 up;", shell=True)
 			subprocess.call("ifconfig eth0 down; sleep 1; systemctl restart NetworkManager; sleep 3; ifconfig eth0 up;", shell=True)
 	time.sleep(5)

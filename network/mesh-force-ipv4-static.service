@@ -1,7 +1,6 @@
 [Unit]
 Description=Force ipv4 static 
-Wants=network-online.target
-After=network-online.target
+After=NetworkManager.service
 
 [Service]
 ExecStart=/opt/RPi-tools/network/mesh-force-ipv4-static.sh

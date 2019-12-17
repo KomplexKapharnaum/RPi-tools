@@ -1,7 +1,6 @@
 [Unit]
 Description=Forward uplink to sub-networks
-Wants=network-online.target
-After=network-online.target
+After=NetworkManager.service
 
 [Service]
 Type=oneshot
