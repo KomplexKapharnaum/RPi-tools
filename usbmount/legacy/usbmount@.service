@@ -1,0 +1,8 @@
+[Unit]
+Description=Mount USB Drive on %i
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/root/RPi-tools/usbmount/usbmount.sh add %i
+ExecStop=/root/RPi-tools/usbmount/usbmount.sh remove %i

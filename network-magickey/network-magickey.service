@@ -1,0 +1,14 @@
+[Unit]
+BindsTo=etc-NetworkManager-system\x2dconnections.mount
+After=etc-NetworkManager-system\x2dconnections.mount
+
+[Service]
+Type=exec
+ExecStart=/usr/bin/systemctl restart NetworkManager
+ExecStop=/usr/bin/systemctl restart NetworkManager
+RemainAfterExit=yes
+
+[Install]
+#Also=etc-NetworkManager-system\\x2dconnections.mount
+WantedBy=etc-NetworkManager-system\x2dconnections.mount
+

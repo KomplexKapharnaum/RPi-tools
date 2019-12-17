@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+import subprocess
+import time, sys, os
+
+gateway="2.0.0.1"
+iface="wlan0"
+
+print("Hello")
+sys.stdout.flush()
+
+if len(sys.argv) >= 2:
+    iface = sys.argv[1]
+
+if len(sys.argv) >= 3:
+    gateway = sys.argv[2]
+
+print("Watching ", gateway, "on", iface)
+sys.stdout.flush()
+
+FNULL = open(os.devnull, 'w')
+
+while True:
+    
+    time.sleep(10)
+    
+    print('----- test -----')
+    sys.stdout.flush()
+    ping = subprocess.call("ping -c 1 "+gateway, shell=True, stdout=FNULL)
+    
+    if int(ping) == 0:
+        print( "antenna is reachable, checking ip validity")
+        flag = subprocess.check_output("ifconfig "+iface+" | grep flags |  cut -d'=' -f 2 | cut -d'<' -f 1", shell=True).strip()
+        if int(flag) == 4163:
+            try:
+                net4 = subprocess.check_output("ifconfig "+iface+" | grep netmask", shell=True).strip()
+                print ("ipv4 ok on "+iface)
+            except:
+                print ("ipv4 missing.. restarting "+iface)
+                subprocess.call("ifconfig "+iface+" down; sleep 4; ifconfig "+iface+" up;", shell=True)
+	    
+    else:
+        print("antenna is missing, restarting "+iface)
+        subprocess.call("ifconfig "+iface+" down; sleep 4; ifconfig "+iface+" up;", shell=True)
+    

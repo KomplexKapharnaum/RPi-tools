@@ -1,0 +1,9 @@
+[Unit]
+Description=Set Audio output with audio from /boot/config.txt (audio=auto or hdmi or jack) 
+
+[Service]
+Type=oneshot
+ExecStart=/opt/RPi-tools/audioselect/audioselect.sh
+
+[Install]
+WantedBy=multi-user.target

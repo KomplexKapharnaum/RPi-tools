@@ -1,0 +1,17 @@
+[Unit]
+Bindsto=mnt-usb.mount
+After=mnt-usb.mount
+ConditionPathIsDirectory=/mnt/usb/network_config
+
+[Mount]
+What=/mnt/usb/network_config
+Where=/etc/NetworkManager/system-connections
+Type=none
+Options=bind
+
+
+[Install]
+WantedBy=mnt-usb.mount
+
+
+

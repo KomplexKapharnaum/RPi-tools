@@ -1,0 +1,9 @@
+[Unit]
+Description=Starter launch services based on /boot/config.txt
+
+[Service]
+Type=oneshot
+ExecStart=/opt/RPi-tools/starter/starter
+
+[Install]
+WantedBy=multi-user.target

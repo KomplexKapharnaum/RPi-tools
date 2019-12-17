@@ -1,0 +1,283 @@
+### Burn image using
+###
+https://archlinuxarm.org/platforms/armv8/broadcom/raspberry-pi-4
+
+
+### log in as root
+###
+su root     =>  root
+
+
+### Init Pacman & update
+###
+pacman-key --init
+pacman-key --populate archlinuxarm
+pacman -Syu
+    #if certs error:    rm /etc/ssl/certs/ca-certificates.crt && pacman -Syu
+pacman-db-upgrade
+pacman -Sc
+
+
+### Change root password
+###
+passwd   =>   rootpi
+
+
+### enable SSH root login
+###
+nano /etc/ssh/sshd_config
+=> PermitRootLogin yes 
+systemctl restart sshd
+
+
+### generate rpi ssh keys
+###
+ssh-keygen  => no password
+
+
+### copy remote ssh key to rpi
+###
+[from remote machine] ssh-copy-id root@<IP-ADDRESS>
+
+
+### remove alarm
+###
+userdel -r alarm
+
+
+### install some stuffs
+###
+pacman -S git python python-pip python-setuptools --noconfirm
+pacman -S avahi wget imagemagick htop --noconfirm
+systemctl enable avahi-daemon
+systemctl start avahi-daemon
+
+### switch from netctl to NetworkManager
+###
+pacman -S networkmanager dnsmasq --noconfirm
+pacman -R dhcpcd --noconfirm
+systemctl stop systemd-resolved
+systemctl disable systemd-resolved
+
+nano /etc/resolv.conf 
+=> 
+nameserver 8.8.8.8
+nameserver 1.1.1.1
+
+nano /etc/hostname   
+=>  rastapi
+
+nano /etc/NetworkManager/NetworkManager.conf
+=>  
+[main]
+plugins=keyfile
+#dns=dnsmasq
+dns=none
+
+systemctl enable NetworkManager
+systemctl start NetworkManager
+nmcli con add type ethernet con-name eth0-dhcp ifname eth0
+pacman -R netctl --noconfirm
+
+systemctl enable dnsmasq
+systemctl start dnsmasq
+
+### clone RPi-tools
+###
+cd /opt
+git clone https://github.com/KomplexKapharnaum/RPi-tools.git
+
+
+### copy config.txt
+### (check if there is no new config.txt settings that you should keep)
+###
+cp /opt/RPi-tools/config.txt /boot/config.txt
+reboot
+
+
+### dynhost
+###
+ln -s /opt/RPi-tools/dynhost/dynhost.service /etc/systemd/system/dynhost.service
+systemctl enable dynhost
+systemctl start dynhost
+
+
+### audioselect 
+### (needs dtparam=audio=on inf /boot/config.txt)
+###
+pacman -S alsa alsa-utils --noconfirm
+cp /opt/RPi-tools/audioselect/asound.conf /etc/asound.conf
+ln -s /opt/RPi-tools/audioselect/audioselect.service /etc/systemd/system/audioselect.service
+systemctl enable audioselect
+systemctl start audioselect
+
+
+### starter
+###
+pacman -S python-pydbus --noconfirm
+ln -s /opt/RPi-tools/starter/starter.service /etc/systemd/system/starter.service
+systemctl enable starter
+systemctl start starter
+
+
+### usbmount
+###
+# mkdir /mnt/usb
+# ln -s /opt/RPi-tools/usbmount/mnt-usb.mount /etc/systemd/system/mnt-usb.mount
+# systemctl enable mnt-usb.mount
+cd /opt
+git clone https://github.com/Hemisphere-Project/usbmount.git
+cd usbmount/
+pacman -S lockfile-progs --noconfirm
+ln -s /opt/usbmount/90-usbmount.rules /etc/udev/rules.d/
+ln -s /opt/usbmount/usbmount@.service /etc/systemd/system/
+mkdir -p /mnt/usb{0..7}
+udevadm control --reload-rules && udevadm trigger
+# TODO: check ln -> /data/usb
+
+### network-magickey
+### 
+(not sure how to enable)
+
+
+### data partition
+###
+-> gparted sd card 
+    - shrink system partition to ~6Gb
+    - append ~1Gb partition (ext4)
+    - boot pi
+
+### french keyboard
+###
+nano /etc/bash.bashrc
+=> (append)     loadkeys fr
+
+
+### rorw
+###
+systemctl disable systemd-random-seed
+
+=> get UUID with 'blkid /dev/mmcblk0'
+
+nano /etc/fstab
+=> (set)
+UUID=8C01-DC23                                  /boot       vfat    defaults,ro,errors=remount-ro,umask=177        0       0
+UUID=6459e25e-1688-4f96-bf7c-e72d9855a93c       /data       ext4    defaults        0       0
+
+reboot
+
+mkdir /data
+mkdir /data/media
+mkdir /data/var
+mkdir /data/var/lib
+mkdir /data/var/lib/NetworkManager
+
+nano /boot/cmdline.txt
+=> (remove)     rw
+=> (insert)     fastboot noswap ro
+
+nano /etc/fstab
+=> (append)
+/run                                            /var/run     none    defaults,bind 0 0
+/data/var/lib/NetworkManager                    /var/lib/NetworkManager none defaults,bind 0 0
+/tmp                                            /var/lock   none    defaults,bind 0 0    
+/tmp                                            /var/spool  none    defaults,bind 0 0
+/tmp                                            /var/log    none    defaults,bind 0 0
+/tmp                                            /var/tmp    none    defaults,bind 0 0
+
+reboot
+rw
+
+nano /etc/bash.bashrc
+=> (append)     source /opt/RPi-tools/rorw/rorw.bashrc
+
+nano /etc/bash.bash_logout
+=> (append)
+rw
+history -a
+fake-hwclock save
+ro
+
+
+### network interface name persistence
+### 
+nano /boot/cmdline.txt
+    => (append) net.ifnames=0       #biosdevname=0
+
+#
+# fake-hwclock
+#
+systemctl disable systemd-timesyncd
+pacman -S fake-hwclock --noconfirm
+nano /usr/lib/systemd/scripts/fake-hwclock.sh
+=> (edit)   STATEFILE="/data/var/fake-hwclock-state"
+/usr/lib/systemd/scripts/fake-hwclock.sh save
+systemctl enable fake-hwclock fake-hwclock-save.timer
+
+
+
+#
+# Black Boot
+#
+cp /etc/systemd/system/getty.target.wants/getty@tty{1,3}.service
+    => DefaultInstance=tty3 (instead of tty1)
+systemctl disable getty@tty1
+nano /boot/cmdline.txt
+    => console=tty3 (instead of tty1)
+    => (add) logo.nologo vt.global_cursor_default=0 consoleblank=0 quiet loglevel=3 vga=current
+
+
+#
+# HPlayer2
+#
+cd /opt
+git clone https://github.com/Hemisphere-Project/HPlayer2.git
+cd HPlayer2/scripts
+./build.sh
+ln -s /opt/HPlayer2/hplayer2\@.service /etc/systemd/system/hplayer2\@.service
+
+
+#
+# Splash
+#
+pacman -S fbida --noconfirm
+ln -s /opt/RPi-tools/splashscreen/splashscreen.service /etc/systemd/system/splashscreen.service
+systemctl enable splashscreen.service
+
+# 
+#  Syncthing
+# 
+pacman -S syncthing
+pip3 install syncthing
+ln -s /opt/RPi-tools/syncthing/sync-client.service /etc/systemd/system/sync-client.service
+ln -s /opt/RPi-tools/syncthing/sync-master.service /etc/systemd/system/sync-master.service
+
+
+#
+#   Filemanager
+#
+pacman -S php php-curl php-mbstring php-gd
+# php -S 0.0.0.0:8090 -t /opt/RPi-tools/filemanager/KodExplorer/
+
+
+#
+# TFT 35a
+#
+https://medium.com/@avik.das/setting-up-an-lcd-screen-on-the-raspberry-pi-2018-edition-d0b2792783cd
+
+
+## VRAC
+add in /etc/modules-load.d/raspberrypi.conf
+ i2c-dev
+ i2c-bcm2708
+
+### TODO
+###
+- unifi
+- router mode config (see RPi-tools/network)
+- syncthing
+- first boot (after clone):
+    * resize2fs /data
+    * reset syncthing device id
+
+

@@ -1,0 +1,9 @@
+[Unit]
+Description=Force ipv4 static 
+After=NetworkManager.service
+
+[Service]
+ExecStart=/opt/RPi-tools/network/mesh-force-ipv4-static.sh
+
+[Install]
+WantedBy=multi-user.target 
