@@ -4,7 +4,7 @@ Wants=network-online.target
 After=network-online.target
 
 [Service]
-ExecStart=/root/RPi-tools/networks/force-ipv4-static.sh
+ExecStart=/opt/RPi-tools/network/mesh-force-ipv4-static.sh
 
 [Install]
 WantedBy=multi-user.target 

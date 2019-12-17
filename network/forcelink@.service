@@ -1,0 +1,10 @@
+[Unit]
+Description=Ping 10.0.0.254, restart interface if failed
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/opt/RPi-tools/network/forcelink %i
+
+[Install]
+WantedBy=multi-user.target
