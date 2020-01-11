@@ -58,14 +58,21 @@ pacman -S networkmanager dnsmasq --noconfirm
 pacman -R dhcpcd --noconfirm
 systemctl stop systemd-resolved
 systemctl disable systemd-resolved
-rm -rf /etc/resolv.conf
+
+nano /etc/resolv.conf 
+=> 
+nameserver 8.8.8.8
+nameserver 1.1.1.1
+
 nano /etc/hostname   
 =>  rastapi
+
 nano /etc/NetworkManager/NetworkManager.conf
 =>  
 [main]
 plugins=keyfile
-dns=dnsmasq
+#dns=dnsmasq
+dns=none
 
 systemctl enable NetworkManager
 systemctl start NetworkManager
@@ -75,20 +82,20 @@ pacman -R netctl --noconfirm
 
 ### clone RPi-tools
 ###
-cd /root
+cd /opt
 git clone https://github.com/KomplexKapharnaum/RPi-tools.git
 
 
 ### copy config.txt
 ### (check if there is no new config.txt settings that you should keep)
 ###
-cp /root/RPi-tools/config.txt /boot/config.txt
+cp /opt/RPi-tools/config.txt /boot/config.txt
 reboot
 
 
 ### dynhost
 ###
-ln -s /root/RPi-tools/dynhost/dynhost.service /etc/systemd/system/dynhost.service
+ln -s /opt/RPi-tools/dynhost/dynhost.service /etc/systemd/system/dynhost.service
 systemctl enable dynhost
 systemctl start dynhost
 
@@ -97,8 +104,8 @@ systemctl start dynhost
 ### (needs dtparam=audio=on inf /boot/config.txt)
 ###
 pacman -S alsa alsa-utils --noconfirm
-cp /root/RPi-tools/audioselect/asound.conf /etc/asound.conf
-ln -s /root/RPi-tools/audioselect/audioselect.service /etc/systemd/system/audioselect.service
+cp /opt/RPi-tools/audioselect/asound.conf /etc/asound.conf
+ln -s /opt/RPi-tools/audioselect/audioselect.service /etc/systemd/system/audioselect.service
 systemctl enable audioselect
 systemctl start audioselect
 
@@ -106,7 +113,7 @@ systemctl start audioselect
 ### starter
 ###
 pacman -S python-pydbus --noconfirm
-ln -s /root/RPi-tools/starter/starter.service /etc/systemd/system/starter.service
+ln -s /opt/RPi-tools/starter/starter.service /etc/systemd/system/starter.service
 systemctl enable starter
 systemctl start starter
 
@@ -114,7 +121,7 @@ systemctl start starter
 ### usbmount
 ###
 mkdir /mnt/usb
-ln -s /root/RPi-tools/usbmount/mnt-usb.mount /etc/systemd/system/mnt-usb.mount
+ln -s /opt/RPi-tools/usbmount/mnt-usb.mount /etc/systemd/system/mnt-usb.mount
 systemctl enable mnt-usb.mount
 
 
@@ -159,7 +166,7 @@ reboot
 rw
 
 nano /etc/bash.bashrc
-=> (append)     source /root/RPi-tools/rorw/rorw.bashrc
+=> (append)     source /opt/RPi-tools/rorw/rorw.bashrc
 
 nano /etc/bash.bash_logout
 => (append)
@@ -204,18 +211,18 @@ nano /boot/cmdline.txt
 #
 # HPlayer2
 #
-cd /root
+cd /opt
 git clone https://github.com/Hemisphere-Project/HPlayer2.git
 cd HPlayer2/scripts
 ./build.sh
-ln -s /root/HPlayer2/hplayer2\@.service /etc/systemd/system/hplayer2\@.service
+ln -s /opt/HPlayer2/hplayer2\@.service /etc/systemd/system/hplayer2\@.service
 
 
 #
 # Splash
 #
 pacman -S fbida --noconfirm
-ln -s /root/RPi-tools/splashscreen/splashscreen.service /etc/systemd/system/splashscreen.service
+ln -s /opt/RPi-tools/splashscreen/splashscreen.service /etc/systemd/system/splashscreen.service
 systemctl enable splashscreen.service
 
 # 
@@ -223,15 +230,15 @@ systemctl enable splashscreen.service
 # 
 pacman -S syncthing
 pip3 install syncthing
-ln -s /root/RPi-tools/syncthing/sync-client.service /etc/systemd/system/sync-client.service
-ln -s /root/RPi-tools/syncthing/sync-master.service /etc/systemd/system/sync-master.service
+ln -s /opt/RPi-tools/syncthing/sync-client.service /etc/systemd/system/sync-client.service
+ln -s /opt/RPi-tools/syncthing/sync-master.service /etc/systemd/system/sync-master.service
 
 
 #
 #   Filemanager
 #
 pacman -S php php-curl php-mbstring php-gd
-# php -S 0.0.0.0:8090 -t /root/RPi-tools/filemanager/KodExplorer/
+# php -S 0.0.0.0:8090 -t /opt/RPi-tools/filemanager/KodExplorer/
 
 
 

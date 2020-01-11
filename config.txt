@@ -8,7 +8,7 @@ dtparam=audio=on
 audio_pwm_mode=2
 dtparam=i2c_arm=on
 initramfs initramfs-linux.img followkernel
-display_lcd_rotate=2
+#display_lcd_rotate=2
 
 #
 # FastBoot
@@ -35,7 +35,7 @@ hdmi_mode=16            # 82: 1080p / 85: 720p / 16: 1024×768 / 51: 1600×1200
 # IDENTIFICATION
 # Hostname = {name}
 #
-name=hpi-demo
+name=rastaONE
 
 
 #
@@ -43,7 +43,7 @@ name=hpi-demo
 # Start systemctl services
 # exemple: start=hplayer2@kxkm,tickets
 #
-start=hplayer2@gadagne19,network-off
+#start=hplayer2@gadagne19,network-off
 
 
 #
@@ -51,4 +51,4 @@ start=hplayer2@gadagne19,network-off
 # Select audio output (auto, hdmi, jack, usb)
 # In auto: will choose hdmi if used for video, or jack otherwise
 #
-audio=jack
+audio=auto
