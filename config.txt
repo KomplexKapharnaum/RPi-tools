@@ -3,7 +3,7 @@
 ##
 ## RASPBERRY PI settings
 ##
-gpu_mem=256
+gpu_mem=200
 dtparam=audio=on
 audio_pwm_mode=2
 dtparam=i2c_arm=on
