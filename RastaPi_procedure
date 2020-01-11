@@ -79,6 +79,8 @@ systemctl start NetworkManager
 nmcli con add type ethernet con-name eth0-dhcp ifname eth0
 pacman -R netctl --noconfirm
 
+systemctl enable dnsmasq
+systemctl start dnsmasq
 
 ### clone RPi-tools
 ###
@@ -120,10 +122,18 @@ systemctl start starter
 
 ### usbmount
 ###
-mkdir /mnt/usb
-ln -s /opt/RPi-tools/usbmount/mnt-usb.mount /etc/systemd/system/mnt-usb.mount
-systemctl enable mnt-usb.mount
-
+# mkdir /mnt/usb
+# ln -s /opt/RPi-tools/usbmount/mnt-usb.mount /etc/systemd/system/mnt-usb.mount
+# systemctl enable mnt-usb.mount
+cd /opt
+git clone https://github.com/Hemisphere-Project/usbmount.git
+cd usbmount/
+pacman -S lockfile-progs --noconfirm
+ln -s /opt/usbmount/90-usbmount.rules /etc/udev/rules.d/
+ln -s /opt/usbmount/usbmount@.service /etc/systemd/system/
+mkdir -p /mnt/usb{0..7}
+udevadm control --reload-rules && udevadm trigger
+# TODO: check ln -> /data/usb
 
 ### network-magickey
 ### 
@@ -142,25 +152,38 @@ systemctl enable mnt-usb.mount
 nano /etc/bash.bashrc
 => (append)     loadkeys fr
 
+
 ### rorw
 ###
+systemctl disable systemd-random-seed
+
+=> get UUID with 'blkid /dev/mmcblk0'
+
+nano /etc/fstab
+=> (set)
+UUID=8C01-DC23                                  /boot       vfat    defaults,ro,errors=remount-ro,umask=177        0       0
+UUID=6459e25e-1688-4f96-bf7c-e72d9855a93c       /data       ext4    defaults        0       0
+
+reboot
+
+mkdir /data
+mkdir /data/media
+mkdir /data/var
+mkdir /data/var/lib
+mkdir /data/var/lib/NetworkManager
+
 nano /boot/cmdline.txt
 => (remove)     rw
 => (insert)     fastboot noswap ro
 
-systemctl disable systemd-random-seed
-
-mkdir /data
 nano /etc/fstab
-=> (set)
-UUID=0FCA-9DBF                                  /boot       vfat    defaults,ro,errors=remount-ro,umask=177        0       0
-UUID=2e8ef7a7-6acb-4209-9ed7-dff0f2b4514f       /data       ext4    defaults        0       0
-tmpfs                                           /var/tmp    tmpfs   nodev,nosuid    0   0
-tmpfs                                           /var/log    tmpfs   nodev,nosuid    0   0
-tmpfs                                           /var/spool  tmpfs   nodev,nosuid    0   0
-tmpfs                                           /var/lock    tmpfs   nodev,nosuid    0   0
-/run                                            /var/run     none    bind                      0       0
-tmpfs                                           /var/lib/NetworkManager    tmpfs   nodev,nosuid    0   0
+=> (append)
+/run                                            /var/run     none    defaults,bind 0 0
+/data/var/lib/NetworkManager                    /var/lib/NetworkManager none defaults,bind 0 0
+/tmp                                            /var/lock   none    defaults,bind 0 0    
+/tmp                                            /var/spool  none    defaults,bind 0 0
+/tmp                                            /var/log    none    defaults,bind 0 0
+/tmp                                            /var/tmp    none    defaults,bind 0 0
 
 reboot
 rw
@@ -192,10 +215,6 @@ nano /usr/lib/systemd/scripts/fake-hwclock.sh
 systemctl enable fake-hwclock fake-hwclock-save.timer
 
 
-#
-# Storage
-#
-mkdir /data/media
 
 #
 # Black Boot
