@@ -1,14 +1,14 @@
-# See /boot/overlays/README for all available options
-
 ##
 ## RASPBERRY PI settings
 ##
-gpu_mem=256
+gpu_mem=200
 dtparam=audio=on
 audio_pwm_mode=2
 dtparam=i2c_arm=on
 initramfs initramfs-linux.img followkernel
-display_lcd_rotate=2
+
+## I2C
+dtoverlay=i2c-gpio,i2c_gpio_sda=15,i2c_gpio_scl=14
 
 #
 # FastBoot
@@ -25,7 +25,18 @@ disable_splash=1    # Disable the rainbow splash screen
 hdmi_force_hotplug=1    # Force HDMI (even without cable)
 hdmi_drive=2            # 1: DVI mode / 2: HDMI mode
 hdmi_group=2            # 0: autodetect / 1: CEA (TVs) / 2: DMT (PC Monitor)
-hdmi_mode=16            # 82: 1080p / 85: 720p / 16: 1024×768 / 51: 1600×1200
+hdmi_mode=16            # 82: 1080p / 85: 720p / 16: 1024x768 / 51: 1600x1200
+
+[pi4]
+# Enable DRM VC4 V3D driver on top of the dispmanx display stack
+#dtoverlay=vc4-fkms-v3d
+#max_framebuffers=2
+
+
+[all]
+dtoverlay=tft35a:rotate=90  # GPIO 3.5" TFT screen
+display_lcd_rotate=2        # Onboard display
+
 
 ##
 ## RASTA-pi settings
@@ -35,15 +46,16 @@ hdmi_mode=16            # 82: 1080p / 85: 720p / 16: 1024×768 / 51: 1600×1200
 # IDENTIFICATION
 # Hostname = {name}
 #
-name=hpi-demo
+name=R-router
 
 
 #
 # SERVICES
 # Start systemctl services
 # exemple: start=hplayer2@kxkm,tickets
+# available: splashscreen / ..
 #
-start=hplayer2@gadagne19,network-off
+start=3615-disco,webfiles,uplink@wlan0,mosquitto
 
 
 #

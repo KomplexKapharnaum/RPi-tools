@@ -172,7 +172,7 @@ ro
 ### network interface name persistence
 ### 
 nano /boot/cmdline.txt
-    => (append) net.ifnames=0 #biosdevname=0
+    => (append) net.ifnames=0       #biosdevname=0
 
 #
 # fake-hwclock
@@ -234,6 +234,16 @@ pacman -S php php-curl php-mbstring php-gd
 # php -S 0.0.0.0:8090 -t /root/RPi-tools/filemanager/KodExplorer/
 
 
+#
+# TFT 35a
+#
+https://medium.com/@avik.das/setting-up-an-lcd-screen-on-the-raspberry-pi-2018-edition-d0b2792783cd
+
+
+## VRAC
+add in /etc/modules-load.d/raspberrypi.conf
+ i2c-dev
+ i2c-bcm2708
 
 ### TODO
 ###
