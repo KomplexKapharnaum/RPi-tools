@@ -46,7 +46,7 @@ display_lcd_rotate=2        # Onboard display
 # IDENTIFICATION
 # Hostname = {name}
 #
-name=R-router
+name=rastaONE
 
 
 #
@@ -63,4 +63,4 @@ start=3615-disco,webfiles,uplink@wlan0,mosquitto
 # Select audio output (auto, hdmi, jack, usb)
 # In auto: will choose hdmi if used for video, or jack otherwise
 #
-audio=jack
+audio=auto

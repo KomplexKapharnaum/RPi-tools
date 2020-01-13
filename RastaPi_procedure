@@ -58,37 +58,46 @@ pacman -S networkmanager dnsmasq --noconfirm
 pacman -R dhcpcd --noconfirm
 systemctl stop systemd-resolved
 systemctl disable systemd-resolved
-rm -rf /etc/resolv.conf
+
+nano /etc/resolv.conf 
+=> 
+nameserver 8.8.8.8
+nameserver 1.1.1.1
+
 nano /etc/hostname   
 =>  rastapi
+
 nano /etc/NetworkManager/NetworkManager.conf
 =>  
 [main]
 plugins=keyfile
-dns=dnsmasq
+#dns=dnsmasq
+dns=none
 
 systemctl enable NetworkManager
 systemctl start NetworkManager
 nmcli con add type ethernet con-name eth0-dhcp ifname eth0
 pacman -R netctl --noconfirm
 
+systemctl enable dnsmasq
+systemctl start dnsmasq
 
 ### clone RPi-tools
 ###
-cd /root
+cd /opt
 git clone https://github.com/KomplexKapharnaum/RPi-tools.git
 
 
 ### copy config.txt
 ### (check if there is no new config.txt settings that you should keep)
 ###
-cp /root/RPi-tools/config.txt /boot/config.txt
+cp /opt/RPi-tools/config.txt /boot/config.txt
 reboot
 
 
 ### dynhost
 ###
-ln -s /root/RPi-tools/dynhost/dynhost.service /etc/systemd/system/dynhost.service
+ln -s /opt/RPi-tools/dynhost/dynhost.service /etc/systemd/system/dynhost.service
 systemctl enable dynhost
 systemctl start dynhost
 
@@ -97,8 +106,8 @@ systemctl start dynhost
 ### (needs dtparam=audio=on inf /boot/config.txt)
 ###
 pacman -S alsa alsa-utils --noconfirm
-cp /root/RPi-tools/audioselect/asound.conf /etc/asound.conf
-ln -s /root/RPi-tools/audioselect/audioselect.service /etc/systemd/system/audioselect.service
+cp /opt/RPi-tools/audioselect/asound.conf /etc/asound.conf
+ln -s /opt/RPi-tools/audioselect/audioselect.service /etc/systemd/system/audioselect.service
 systemctl enable audioselect
 systemctl start audioselect
 
@@ -106,17 +115,25 @@ systemctl start audioselect
 ### starter
 ###
 pacman -S python-pydbus --noconfirm
-ln -s /root/RPi-tools/starter/starter.service /etc/systemd/system/starter.service
+ln -s /opt/RPi-tools/starter/starter.service /etc/systemd/system/starter.service
 systemctl enable starter
 systemctl start starter
 
 
 ### usbmount
 ###
-mkdir /mnt/usb
-ln -s /root/RPi-tools/usbmount/mnt-usb.mount /etc/systemd/system/mnt-usb.mount
-systemctl enable mnt-usb.mount
-
+# mkdir /mnt/usb
+# ln -s /opt/RPi-tools/usbmount/mnt-usb.mount /etc/systemd/system/mnt-usb.mount
+# systemctl enable mnt-usb.mount
+cd /opt
+git clone https://github.com/Hemisphere-Project/usbmount.git
+cd usbmount/
+pacman -S lockfile-progs --noconfirm
+ln -s /opt/usbmount/90-usbmount.rules /etc/udev/rules.d/
+ln -s /opt/usbmount/usbmount@.service /etc/systemd/system/
+mkdir -p /mnt/usb{0..7}
+udevadm control --reload-rules && udevadm trigger
+# TODO: check ln -> /data/usb
 
 ### network-magickey
 ### 
@@ -135,31 +152,44 @@ systemctl enable mnt-usb.mount
 nano /etc/bash.bashrc
 => (append)     loadkeys fr
 
+
 ### rorw
 ###
+systemctl disable systemd-random-seed
+
+=> get UUID with 'blkid /dev/mmcblk0'
+
+nano /etc/fstab
+=> (set)
+UUID=8C01-DC23                                  /boot       vfat    defaults,ro,errors=remount-ro,umask=177        0       0
+UUID=6459e25e-1688-4f96-bf7c-e72d9855a93c       /data       ext4    defaults        0       0
+
+reboot
+
+mkdir /data
+mkdir /data/media
+mkdir /data/var
+mkdir /data/var/lib
+mkdir /data/var/lib/NetworkManager
+
 nano /boot/cmdline.txt
 => (remove)     rw
 => (insert)     fastboot noswap ro
 
-systemctl disable systemd-random-seed
-
-mkdir /data
 nano /etc/fstab
-=> (set)
-UUID=0FCA-9DBF                                  /boot       vfat    defaults,ro,errors=remount-ro,umask=177        0       0
-UUID=2e8ef7a7-6acb-4209-9ed7-dff0f2b4514f       /data       ext4    defaults        0       0
-tmpfs                                           /var/tmp    tmpfs   nodev,nosuid    0   0
-tmpfs                                           /var/log    tmpfs   nodev,nosuid    0   0
-tmpfs                                           /var/spool  tmpfs   nodev,nosuid    0   0
-tmpfs                                           /var/lock    tmpfs   nodev,nosuid    0   0
-/run                                            /var/run     none    bind                      0       0
-tmpfs                                           /var/lib/NetworkManager    tmpfs   nodev,nosuid    0   0
+=> (append)
+/run                                            /var/run     none    defaults,bind 0 0
+/data/var/lib/NetworkManager                    /var/lib/NetworkManager none defaults,bind 0 0
+/tmp                                            /var/lock   none    defaults,bind 0 0    
+/tmp                                            /var/spool  none    defaults,bind 0 0
+/tmp                                            /var/log    none    defaults,bind 0 0
+/tmp                                            /var/tmp    none    defaults,bind 0 0
 
 reboot
 rw
 
 nano /etc/bash.bashrc
-=> (append)     source /root/RPi-tools/rorw/rorw.bashrc
+=> (append)     source /opt/RPi-tools/rorw/rorw.bashrc
 
 nano /etc/bash.bash_logout
 => (append)
@@ -185,10 +215,6 @@ nano /usr/lib/systemd/scripts/fake-hwclock.sh
 systemctl enable fake-hwclock fake-hwclock-save.timer
 
 
-#
-# Storage
-#
-mkdir /data/media
 
 #
 # Black Boot
@@ -204,18 +230,18 @@ nano /boot/cmdline.txt
 #
 # HPlayer2
 #
-cd /root
+cd /opt
 git clone https://github.com/Hemisphere-Project/HPlayer2.git
 cd HPlayer2/scripts
 ./build.sh
-ln -s /root/HPlayer2/hplayer2\@.service /etc/systemd/system/hplayer2\@.service
+ln -s /opt/HPlayer2/hplayer2\@.service /etc/systemd/system/hplayer2\@.service
 
 
 #
 # Splash
 #
 pacman -S fbida --noconfirm
-ln -s /root/RPi-tools/splashscreen/splashscreen.service /etc/systemd/system/splashscreen.service
+ln -s /opt/RPi-tools/splashscreen/splashscreen.service /etc/systemd/system/splashscreen.service
 systemctl enable splashscreen.service
 
 # 
@@ -223,15 +249,15 @@ systemctl enable splashscreen.service
 # 
 pacman -S syncthing
 pip3 install syncthing
-ln -s /root/RPi-tools/syncthing/sync-client.service /etc/systemd/system/sync-client.service
-ln -s /root/RPi-tools/syncthing/sync-master.service /etc/systemd/system/sync-master.service
+ln -s /opt/RPi-tools/syncthing/sync-client.service /etc/systemd/system/sync-client.service
+ln -s /opt/RPi-tools/syncthing/sync-master.service /etc/systemd/system/sync-master.service
 
 
 #
 #   Filemanager
 #
 pacman -S php php-curl php-mbstring php-gd
-# php -S 0.0.0.0:8090 -t /root/RPi-tools/filemanager/KodExplorer/
+# php -S 0.0.0.0:8090 -t /opt/RPi-tools/filemanager/KodExplorer/
 
 
 #

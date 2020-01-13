@@ -1,10 +1,10 @@
-Unit]
-Description=Splash screen
+[Unit]
+Description="Splash screen"
 DefaultDependencies=no
 After=local-fs.target
 
 [Service]
-ExecStart=/root/RPi-tools/splashscreen/splashscreen.sh
+ExecStart=/opt/RPi-tools/splashscreen/splashscreen.sh
 StandardInput=tty
 StandardOutput=tty
 
