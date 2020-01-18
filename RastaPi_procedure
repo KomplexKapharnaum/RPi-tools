@@ -157,7 +157,7 @@ nano /etc/bash.bashrc
 ###
 systemctl disable systemd-random-seed
 
-=> get UUID with 'blkid /dev/mmcblk0'
+=> get UUID with 'blkid /dev/mmcblk0*'
 
 nano /etc/fstab
 => (set)
@@ -195,7 +195,7 @@ nano /etc/bash.bash_logout
 => (append)
 rw
 history -a
-fake-hwclock save
+/usr/lib/systemd/scripts/fake-hwclock.sh save
 ro
 
 
