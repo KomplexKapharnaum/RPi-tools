@@ -38,29 +38,3 @@ dtoverlay=tft35a:rotate=90  # GPIO 3.5" TFT screen
 display_lcd_rotate=2        # Onboard display
 
 
-##
-## RASTA-pi settings
-##
-
-#
-# IDENTIFICATION
-# Hostname = {name}
-#
-name=rastaONE
-
-
-#
-# SERVICES
-# Start systemctl services
-# exemple: start=hplayer2@kxkm,tickets
-# available: splashscreen / ..
-#
-start=3615-disco,webfiles,uplink@wlan0,mosquitto
-
-
-#
-# AUDIO
-# Select audio output (auto, hdmi, jack, usb)
-# In auto: will choose hdmi if used for video, or jack otherwise
-#
-audio=auto
