@@ -1,9 +1,0 @@
-[Unit]
-Description=Ping 2.0.0.1 on wlan0, restart interface if failed
-After=NetworkManager.service
-
-[Service]
-ExecStart=/opt/RPi-tools/network/forcelink
-
-[Install]
-WantedBy=multi-user.target
