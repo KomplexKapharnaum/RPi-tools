@@ -21,6 +21,7 @@ pacman -Sc
 ### Change root password
 ###
 passwd   =>   rootpi
+passwd alarm => pi
 
 
 ### enable SSH root login
